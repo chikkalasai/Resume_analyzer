@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Compose Email{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Send Email to Shortlisted Candidates</h2>
+
+    {% if success %}
+        <div class="alert alert-success">✅ Emails sent successfully to shortlisted candidates!</div>
+    {% endif %}
+
+    {% if emails %}
+        <p><strong>Recipients:</strong> {{ emails|join:", " }}</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="subject" class="form-label">Subject</label>
+                <input type="text" name="subject" id="subject" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="message" class="form-label">Message</label>
+                <textarea name="message" id="message" rows="6" class="form-control" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Email</button>
+            <a href="{% url 'resume_analyzer' %}" class="btn btn-secondary ms-2">Back</a>
+        </form>
+    {% else %}
+        <div class="alert alert-warning">No shortlisted emails found.</div>
+    {% endif %}
+</div>
+{% endblock %}

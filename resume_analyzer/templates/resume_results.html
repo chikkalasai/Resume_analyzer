@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Resume Results{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">Filtered Resumes</h2>
+
+    <!-- Filter Form -->
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label for="min_score" class="form-label">Minimum Score (out of 10)</label>
+            <input type="number" class="form-control" name="min_score" id="min_score" value="{{ min_score }}" step="0.1" min="0" max="10">
+        </div>
+        <div class="col-md-4">
+            <label for="skill" class="form-label">Skill Contains</label>
+            <input type="text" class="form-control" name="skill" id="skill" value="{{ skill_query }}">
+        </div>
+        <div class="col-md-4 align-self-end d-flex gap-2">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+    </form>
+    
+    {% if success %}
+    <div class="alert alert-success">
+        Emails sent successfully to shortlisted candidates!
+    </div>
+    {% endif %}
+
+    {% if resumes %}
+    <!-- Send Email Form -->
+    <form method="post">
+        {% csrf_token %}
+        <div class="d-grid mb-4">
+            <a href="{% url 'compose_email' %}?min_score={{ min_score }}&skill={{ skill_query }}" 
+               class="btn btn-success btn-lg">
+                Compose & Send Email
+            </a>
+        </div>
+        
+
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Skills</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in resumes %}
+                <tr>
+                    <td>{{ r.name }}</td>
+                    <td>{{ r.email }}</td>
+                    <td>{{ r.skills }}</td>
+                    <td>{{ r.score }}/10</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+
+    {% else %}
+        <div class="alert alert-warning">No matching resumes found.</div>
+    {% endif %}
+</div>
+<!-- Clear All Button -->
+
+<!-- Clear All Resumes and Data Button -->
+<div class="d-grid mt-4">
+    <a href="{% url 'clear_all_data' %}" class="btn btn-danger btn-lg"
+       onclick="return confirm('Are you sure you want to delete all resumes and data?');">
+        Delete All Resumes and Data
+    </a>
+</div>
+
+
+{% endblock %}

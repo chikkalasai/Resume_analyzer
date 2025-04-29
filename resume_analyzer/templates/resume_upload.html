@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Upload Resumes{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="card shadow p-4">
+                <h2 class="mb-4 text-center">Upload Resumes</h2>
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                
+                    <div class="mb-3">
+                        <label for="job_title" class="form-label">Job Title</label>
+                        <input type="text" class="form-control" id="job_title" name="job_title" required>
+                    </div>
+                
+                    <div class="mb-3">
+                        <label for="required_skills" class="form-label">Required Skills (comma-separated)</label>
+                        <input type="text" class="form-control" id="required_skills" name="required_skills" required>
+                        <div class="form-text">Example: Python, Django, SQL</div>
+                    </div>
+                
+                    <div class="mb-3">
+                        <label for="resumes" class="form-label">Select Resume Files</label>
+                        <input type="file" class="form-control" id="resumes" name="resumes" multiple required>
+                    </div>
+                
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Upload Resumes</button>
+                    </div>
+                </form>
+                
+
+                {% if count %}
+                    <div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+                        Successfully uploaded and processed <strong>{{ count }}</strong> resumes!
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
